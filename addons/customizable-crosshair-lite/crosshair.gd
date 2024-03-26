@@ -22,7 +22,13 @@ var crosshairConfig: Dictionary
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_CENTER, true)
+	# Runs only if @tool is uncommented
+	if Engine.is_editor_hint():
+		# Centers the crosshair
+		set_anchors_preset(Control.PRESET_CENTER, true)
+		# Makes it so the crosshair is ignored by mouse clicks
+		mouse_filter = Control.MOUSE_FILTER_PASS
+	
 	updateCrosshairConfig()
 
 
@@ -136,9 +142,9 @@ func _draw() -> void:
 	]
 	
 	# Formular for the start point of the crosshair outline lines
-	var outlineStartPoint: float = (crosshairGap + (crosshairThickness / 2) - (crosshairOutlineThickness / 2))
+	var outlineStartPoint: float = (crosshairGap + (crosshairThickness / 2) - (crosshairOutlineThickness))
 	# Formular for the end point of the crosshair outline lines
-	var outlineEndPoint: float = (crosshairSize + crosshairGap + (crosshairThickness / 2) + (crosshairOutlineThickness / 2))
+	var outlineEndPoint: float = (crosshairSize + crosshairGap + (crosshairThickness / 2) + (crosshairOutlineThickness))
 	
 	# Array of the start point and end point vectors of each crosshair outline line
 	var outlinePoints: PackedVector2Array = [
@@ -154,14 +160,14 @@ func _draw() -> void:
 	
 	# Draw the outline lines under the crosshair lines if crosshair outline is enabled
 	if crosshairOutline:
-		draw_multiline(outlinePoints, Color(Color.BLACK, crosshairColor.a), crosshairThickness + crosshairOutlineThickness)
+		draw_multiline(outlinePoints, Color(Color.BLACK, crosshairColor.a), crosshairThickness + (crosshairOutlineThickness * 2))
 	
 	# Draw the crosshair lines
 	draw_multiline(linePoints, crosshairColor, crosshairThickness)
 	
 	# Draw a square behind the crosshair dot to be used as an outline if crosshair outline is enabled
 	if crosshairOutline && crosshairDot:
-		draw_rect(Rect2(-(crosshairThickness + crosshairOutlineThickness) / 2, -(crosshairThickness + crosshairOutlineThickness) / 2, (crosshairThickness + crosshairOutlineThickness), (crosshairThickness + crosshairOutlineThickness)), Color(Color.BLACK, crosshairColor.a))
+		draw_rect(Rect2(-((crosshairThickness / 2) + crosshairOutlineThickness), -((crosshairThickness / 2) + crosshairOutlineThickness), crosshairThickness + (crosshairOutlineThickness * 2), crosshairThickness + (crosshairOutlineThickness * 2)), Color(Color.BLACK, crosshairColor.a))
 	
 	# Draw a square in the middle of the screen if crosshair dot is enabled
 	if crosshairDot:
