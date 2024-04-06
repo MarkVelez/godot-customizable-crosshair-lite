@@ -87,9 +87,6 @@ func parseConfigString(configString: String) -> void:
 		config["color"][3]
 	)
 	
-	# For some reason lineStyle has the incorrect type so there is a conversion done here to int
-	config["lineStyle"] = type_convert(config["lineStyle"], 2)
-	
 	getCrosshairSettings(config)
 
 
